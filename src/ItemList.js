@@ -9,6 +9,7 @@ const ItemList = ({list, handleChange, handleDelete }) => {
                 {list.map(item => {
                     return (
                         <LineItem
+                            key={list.id}
                             list={item}
                             handleChange={handleChange}
                             handleDelete={handleDelete}

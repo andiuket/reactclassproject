@@ -2,32 +2,28 @@ import Header from './Header';
 import Content from './Content'
 import Footer from './Footer'
 import React from 'react'
+import AddItem from './AddItem';
 
 function App() {
-  const [items, setItems] = React.useState([
-    {
-        id: 1,
-        checked: true,
-        item: "Great Job"
+  const [items, setItems] = React.useState(JSON.parse(localStorage.getItem("shoppingList")))
 
-    },
-    {
-        id: 2,
-        checked: false,
-        item: "Great Job"
+const [newItem, setNewItem] = React.useState("");
 
-    }, 
-    {
-        id: 3,
-        checked: false,
-        item: "Great Job"
 
-    }
-])
-
-  const addingToLocalStorage = (item) => {
+  const updatingLocalStorageandState = (item) => {
     setItems(item)
     localStorage.setItem("shoppingList", JSON.stringify(item))
+  }
+
+  const addItem = (item) => {
+    const id = items.length ? items[items.length - 1].id + 1 : 1
+      const myNewItem = {
+          id,
+          checked: false,
+          item
+      }
+      const ListItem = [...items, myNewItem]
+      updatingLocalStorageandState(ListItem)
   }
 
   const handleChange = (id) => {
@@ -37,19 +33,32 @@ function App() {
                 {...item, checked: !item.checked} 
                 : item )
         })
-    addingToLocalStorage(listItems)
+      updatingLocalStorageandState(listItems)
   }
 
   const handleDelete = (id) => {
     const listItems = items.filter(item => item.id !== id && item)
-    addingToLocalStorage(listItems)
+    updatingLocalStorageandState(listItems)
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(!newItem) return;
+    addItem(newItem)
+    setNewItem("");
+  }
+
+  console.log(newItem)
   return (
     <main className='main'>
       <div className="app">
         <Header 
           title="Grocery"
+        />
+        <AddItem 
+            newItem={newItem}
+            setNewItem={setNewItem}
+            handleSubmit={handleSubmit}
         />
         <Content
           item={items}
