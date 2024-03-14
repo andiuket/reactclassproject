@@ -1,4 +1,5 @@
 import Header from './Header';
+import SearchItem from './SearchItem';
 import Content from './Content'
 import Footer from './Footer'
 import React from 'react'
@@ -6,8 +7,8 @@ import AddItem from './AddItem';
 
 function App() {
   const [items, setItems] = React.useState(JSON.parse(localStorage.getItem("shoppingList")))
-
-const [newItem, setNewItem] = React.useState("");
+  const [newItem, setNewItem] = React.useState("");
+  const [search, setSearch] = React.useState("")
 
 
   const updatingLocalStorageandState = (item) => {
@@ -55,13 +56,18 @@ const [newItem, setNewItem] = React.useState("");
         <Header 
           title="Grocery"
         />
+        
         <AddItem 
             newItem={newItem}
             setNewItem={setNewItem}
             handleSubmit={handleSubmit}
         />
+        <SearchItem
+          search={search}
+          setSearch={setSearch}
+        />
         <Content
-          item={items}
+          item={items.filter(item => (item.item.toLowerCase()).includes(search.toLowerCase()))}
           handleChange={handleChange}
           handleDelete={handleDelete}
         />
